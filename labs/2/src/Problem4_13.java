@@ -2,15 +2,15 @@ import java.util.Scanner;
 
 public class Problem4_13 {
 
-	// FINISHED
-	// (Vowel or consonant?)
-	public static void main(String[] args) {
-	    Scanner input = new Scanner(System.in);
-	    char [] vowel = "aeiou".toCharArray();
-	    char [] consonant = "bcdfghjklmnpqrstvwxyz".toCharArray();
-	    System.out.print("Enter a letter: ");
-	    char user = input.next().charAt(0);
-	    char temp = Character.toLowerCase(user);
+    // FINISHED
+    // (Vowel or consonant?)
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        char [] vowel = "aeiou".toCharArray();
+        char [] consonant = "bcdfghjklmnpqrstvwxyz".toCharArray();
+        System.out.print("Enter a letter: ");
+        char user = input.next().charAt(0);
+        char temp = Character.toLowerCase(user);
         boolean cons = false; // flag booleans
         boolean vow = false;
         
@@ -25,8 +25,8 @@ public class Problem4_13 {
         // check if it's a consonant
         for (int i = 0; i < consonant.length; i++) {
             if (consonant[i] == temp) {
-        	    cons = true;
-        	    break;
+                cons = true;
+                break;
             }
         }
 	    
@@ -38,6 +38,6 @@ public class Problem4_13 {
             System.out.println(user + " is an invalid input.");
         }
 
-	}
+    }
 
 }
