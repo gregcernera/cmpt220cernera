@@ -17,23 +17,23 @@ public class Problem4_13 {
         // check if it's a vowel
         for (int i = 0; i < vowel.length; i++) {
             if (vowel[i] == temp) {
-            	vow = true;
-            	break;
+                vow = true;
+                break;
             }
         }
         
         // check if it's a consonant
         for (int i = 0; i < consonant.length; i++) {
-        	if (consonant[i] == temp) {
+            if (consonant[i] == temp) {
         	    cons = true;
         	    break;
-        	}
+            }
         }
 	    
         if (vow == true) {
-        	System.out.println(user + " is a vowel.");
+            System.out.println(user + " is a vowel.");
         } else if (cons == true) {
-        	System.out.println(user + " is a consonant.");
+            System.out.println(user + " is a consonant.");
         } else {
             System.out.println(user + " is an invalid input.");
         }
