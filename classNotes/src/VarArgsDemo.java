@@ -1,6 +1,7 @@
 
 public class VarArgsDemo {
 
+	// week 5
 	public static void main(String[] args) {
 		printMax(34, 3, 3, 2, 56.5);
 		printMax(new double[]{1, 2, 3});
