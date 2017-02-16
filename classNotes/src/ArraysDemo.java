@@ -21,6 +21,9 @@ public class ArraysDemo {
 		System.out.println(Arrays.equals(list1, list2));
 		System.out.println(Arrays.equals(list2, list3));
 		
+		Arrays.fill(list1, 5);
+		System.out.println(Arrays.toString(list1));
+		
 
 	}
 
