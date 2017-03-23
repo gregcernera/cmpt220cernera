@@ -36,7 +36,7 @@ public class TestArrayList {
 		
 		// Display the contents in reverse order
 		for (int i = cityList.size() - 1; i >= 0; i--) {
-			System.out.println(cityList.get(i) + " ");
+			System.out.print(cityList.get(i) + " ");
 		}
 		System.out.println();
 		
