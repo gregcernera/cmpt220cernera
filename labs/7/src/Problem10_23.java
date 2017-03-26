@@ -53,7 +53,7 @@ class MyString2 {
 		if (this.s.length() > s.length()) x = 1;
 
 		for (int i = 0; i < this.s.length(); i++) {
-			if (this.s.charAt(i) < s.charAt(i)) x = -(i + 1);
+			if (this.s.charAt(i) < s.charAt(i)) x = -(i + 1); // JA: This can give you an out of bounds error
 			if (this.s.charAt(i) > s.charAt(i)) x = i + 1;
 		}
 		return x;
