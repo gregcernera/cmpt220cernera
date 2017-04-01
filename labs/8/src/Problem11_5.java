@@ -11,9 +11,16 @@ public class Problem11_5 {
 		course.addStudent("Greg");
 		course.addStudent("Bob");
 		course.addStudent("Tom");
+		// JA
+		System.out.println(java.util.Arrays.toString(course.getStudents()));
 		course.dropStudent("Greg");
+
+		// JA
+		System.out.println(java.util.Arrays.toString(course.getStudents()));
 		
 		course.clear();
+		// JA
+		System.out.println(java.util.Arrays.toString(course.getStudents()));
 
 	}
 
