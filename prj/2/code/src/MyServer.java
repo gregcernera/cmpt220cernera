@@ -21,7 +21,7 @@ public class MyServer extends JFrame {
 		
 		// create the form
 		JFrame f = new JFrame("//anonymus instant messenger//");
-		f.setSize(400, 360);
+		f.setSize(600, 600);
 		f.setBackground(Color.GRAY);
 		
 		Border border = BorderFactory.createLineBorder(Color.CYAN, 2);
@@ -41,12 +41,15 @@ public class MyServer extends JFrame {
 				+ "\n Warning: Use with descrition. The author is not responsible for the "
 				+ "use of this program to participate in illegal activities. "
 				+ "\n----------------------//------------------------------------");
-		chat.setPreferredSize(new Dimension(200, 300));
+		chat.setPreferredSize(new Dimension(600, 500));
+		chat.setLineWrap(true);
+		chat.setWrapStyleWord(true);
 		chat.setAlignmentX(LEFT_ALIGNMENT);
 		chat.setAlignmentY(TOP_ALIGNMENT);
 		chat.setBackground(Color.BLACK);
 		chat.setForeground(Color.WHITE);
 		chat.setBorder(border);
+		chat.scrollRectToVisible(getBounds());
 		f.add(chat, BorderLayout.NORTH);
 		
 		f.setVisible(true);
@@ -66,7 +69,7 @@ public class MyServer extends JFrame {
 
 	public void start() {
 		try {
-			server = new ServerSocket(6789, 100);
+			server = new ServerSocket(6787, 100);
 			
 			while(true) {
 				try {
@@ -83,7 +86,7 @@ public class MyServer extends JFrame {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			showMessage("Error running program // now disabling connections and ports");
+			showMessage("\nError running program // now disabling connections and ports");
 		}
 	}
 	
