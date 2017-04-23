@@ -10,11 +10,19 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.Key;
+import java.util.Base64;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
@@ -38,8 +46,9 @@ public class MyClient extends JFrame{
 		
 		// create the form
 		JFrame f = new JFrame("//anonymus instant messenger//");
-		f.setSize(400, 360);
+		f.setSize(600, 600);
 		f.setBackground(Color.GRAY);
+		f.setResizable(true);
 		
 		Border border = BorderFactory.createLineBorder(Color.CYAN, 2);
 		
@@ -57,14 +66,26 @@ public class MyClient extends JFrame{
 				+ "for sending instant messages from server to client anonymously. "
 				+ "\n Warning: Use with descrition. The author is not responsible for the "
 				+ "use of this program to participate in illegal activities. "
-				+ "\n----------------------//------------------------------------");
-		chat.setPreferredSize(new Dimension(200, 300));
+				+ "\n----------------------//------------------------------------\n");
+		chat.setPreferredSize(new Dimension(600, 500));
+		chat.setLineWrap(true);
+		chat.setWrapStyleWord(true);
 		chat.setAlignmentX(LEFT_ALIGNMENT);
 		chat.setAlignmentY(TOP_ALIGNMENT);
 		chat.setBackground(Color.BLACK);
 		chat.setForeground(Color.WHITE);
 		chat.setBorder(border);
 		f.add(chat, BorderLayout.NORTH);
+		
+		/*
+		JPanel container = new JPanel();
+		container.add(chat);
+		
+		JScrollPane scrollPane = new JScrollPane(container, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		//scrollPane.setBounds(500, 10, chat.getWidth(), chat.getHeight());
+		//scrollPane.(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		f.add(scrollPane);
+		*/
 		
 		f.setVisible(true);
 		
@@ -97,8 +118,10 @@ public class MyClient extends JFrame{
 	
 	// standby for client connection
 	private void connect() throws IOException {
+		String input = JOptionPane.showInputDialog("Enter port number"); // 6789 default
+		int port = Integer.parseInt(input);
 		showMessage("Connecting... \n");
-		socket = new Socket(InetAddress.getByName(IP), 6789);
+		socket = new Socket(InetAddress.getByName(IP), port);
 		showMessage("Connected to: " + socket.getInetAddress().getHostName());
 	}
 	
@@ -167,7 +190,7 @@ public class MyClient extends JFrame{
 		);
 	}
 	
-	private String encrypt(String message) {
+	private String encrypt(String message) throws Exception {
 		return "";
 	}
 	
