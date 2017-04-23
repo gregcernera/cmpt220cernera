@@ -68,8 +68,10 @@ public class MyServer extends JFrame {
 	}
 
 	public void start() {
+		String input = JOptionPane.showInputDialog("Enter port number"); // 6789 default
+		int port = Integer.parseInt(input);
 		try {
-			server = new ServerSocket(6787, 100);
+			server = new ServerSocket(port, 100);
 			
 			while(true) {
 				try {
