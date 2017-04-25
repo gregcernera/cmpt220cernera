@@ -38,9 +38,9 @@ public class MyServer extends JFrame {
 		// add the chat window
 		chat = new JTextArea("//Welcome to AnonymousIM//. \n This is a program "
 				+ "for sending instant messages from server to client anonymously. "
-				+ "\n Warning: Use with descrition. The author is not responsible for the "
+				+ "\n Warning: Use with discretion. The author is not responsible for the "
 				+ "use of this program to participate in illegal activities. "
-				+ "\n----------------------//------------------------------------");
+				+ "\n----------------------//------------------------------------\n");
 		chat.setPreferredSize(new Dimension(600, 500));
 		chat.setLineWrap(true);
 		chat.setWrapStyleWord(true);
@@ -90,6 +90,8 @@ public class MyServer extends JFrame {
 			e.printStackTrace();
 			showMessage("\nError running program // now disabling connections and ports");
 		}
+		
+		
 	}
 	
 	// standby for client connection
@@ -114,6 +116,7 @@ public class MyServer extends JFrame {
 		String message = "You are now connected.";
 		sendMessage(message);
 		canType(true);
+		
 		do {
 			//have a conversation
 			try {
@@ -175,6 +178,61 @@ public class MyServer extends JFrame {
 	
 	private String decrypt(String message) {
 		return "";
+	}
+	
+	private static int getFirstPrime() {
+		boolean check;
+		do {
+			check = true;
+			
+			try {
+				int num = Integer.parseInt(JOptionPane.showInputDialog("Enter first prime number"));
+				if (isPrime(num))
+					return num;
+				else
+					check = false;
+				
+			} catch (NumberFormatException e) {
+				System.out.println("Error: two prime numbers are need to complete the key excange.");
+				check = false;
+			}
+		} while (!check);
+		return 0;
+	}
+	
+	private static int getSecondPrime() {
+		boolean check;
+		do {
+			check = true;
+			
+			try {
+				int num = Integer.parseInt(JOptionPane.showInputDialog("Enter second prime number"));
+				if (isPrime(num))
+					return num;
+				else
+					check = false;
+				
+			} catch (NumberFormatException e) {
+				System.out.println("Error: two prime numbers are need to complete the key excange.");
+				check = false;
+			}
+		} while (!check);
+		return 0;
+	}
+	
+	private void sendNumbers() throws IOException {
+		outputStream.writeInt(5);
+		outputStream.flush();
+	}
+	
+	private static boolean isPrime(int num) {
+		if (num < 2) return false;
+		if (num == 2) return false;
+		if (num % 2 == 0) return false;
+		for (int i = 3; i <= 0; i++) {
+			if (num % i == 0) return false;
+		}
+		return true;
 	}
 	
 }
