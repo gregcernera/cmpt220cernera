@@ -64,7 +64,7 @@ public class MyClient extends JFrame{
 		// add the chat window
 		chat = new JTextArea("//Welcome to AnonymousIM//. \n This is a program "
 				+ "for sending instant messages from server to client anonymously. "
-				+ "\n Warning: Use with descrition. The author is not responsible for the "
+				+ "\n Warning: Use with discretion. The author is not responsible for the "
 				+ "use of this program to participate in illegal activities. "
 				+ "\n----------------------//------------------------------------\n");
 		chat.setPreferredSize(new Dimension(600, 500));
@@ -196,5 +196,9 @@ public class MyClient extends JFrame{
 	
 	private String decrypt(String message) {
 		return "";
+	}
+	
+	private void keyExchange() {
+		
 	}
 }
