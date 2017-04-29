@@ -1,7 +1,12 @@
 import java.io.*;
 import java.net.*;
+import java.security.Key;
+import java.util.Base64;
 import java.awt.*;
 import java.awt.event.*;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -16,8 +21,12 @@ public class MyServer extends JFrame {
 	private ServerSocket server;
 	private Socket socket;
 	
+	
+	
 	// constructor for MyServer - sets up server window
-	public MyServer() {
+	public MyServer() throws Exception {
+		
+		
 		
 		// create the form
 		JFrame f = new JFrame("//anonymus instant messenger//");
@@ -40,6 +49,7 @@ public class MyServer extends JFrame {
 				+ "for sending instant messages from server to client anonymously. "
 				+ "\n Warning: Use with discretion. The author is not responsible for the "
 				+ "use of this program to participate in illegal activities. "
+				+ "To terminate the connection, type 'END' (all caps, no quotes) in the txt box. "
 				+ "\n----------------------//------------------------------------\n");
 		chat.setPreferredSize(new Dimension(600, 500));
 		chat.setLineWrap(true);
@@ -66,6 +76,8 @@ public class MyServer extends JFrame {
 				
 		
 	}
+	
+	// ** IM functionality
 
 	public void start() {
 		String input = JOptionPane.showInputDialog("Enter port number"); // 6789 default
@@ -172,14 +184,26 @@ public class MyServer extends JFrame {
 		);
 	}
 	
-	private String encrypt(String message) {
-		return "";
+	
+	// ** encryption (couldn't figure out)
+	
+	private static String encrypt(String message, Key aesKey, Cipher cipher) throws Exception {
+		cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+		byte [] encrypted = cipher.doFinal(message.getBytes());
+		Base64.Encoder encoder = Base64.getEncoder();
+		String encryptedString = encoder.encodeToString(encrypted);
+		return encryptedString;
 	}
 	
-	private String decrypt(String message) {
-		return "";
+	private static String decrypt(String encryptedString, Key aesKey, Cipher cipher) throws Exception {
+		Base64.Decoder decoder = Base64.getDecoder();
+		cipher.init(Cipher.DECRYPT_MODE, aesKey);
+		String decrypted = new String(cipher.doFinal(decoder.decode(encryptedString)));
+		return decrypted;
 	}
 	
+	
+	// DIFFIE-HELMAN KEY EXCHANGE
 	private static int getFirstPrime() {
 		boolean check;
 		do {
@@ -221,8 +245,7 @@ public class MyServer extends JFrame {
 	}
 	
 	private void sendNumbers() throws IOException {
-		outputStream.writeInt(5);
-		outputStream.flush();
+		
 	}
 	
 	private static boolean isPrime(int num) {
