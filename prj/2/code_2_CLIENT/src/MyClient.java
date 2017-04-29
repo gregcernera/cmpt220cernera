@@ -66,6 +66,7 @@ public class MyClient extends JFrame{
 				+ "for sending instant messages from server to client anonymously. "
 				+ "\n Warning: Use with discretion. The author is not responsible for the "
 				+ "use of this program to participate in illegal activities. "
+				+ "To end the connection, type 'END' (all caps, no quotes) in the txt box. "
 				+ "\n----------------------//------------------------------------\n");
 		chat.setPreferredSize(new Dimension(600, 500));
 		chat.setLineWrap(true);
