@@ -38,6 +38,9 @@ public class MyClient extends JFrame{
 	private String IP;
 	private String message = "";
 	
+	// key for encryption/decryption
+	String KEY = "12345654321";
+	
 	// constructor for MyServer - sets up server window
 	public MyClient(String host) {
 		// MAY HAVE TO ALTER THE CONSTRUCTOR FROM THE MYSERVER CLASS
@@ -78,15 +81,6 @@ public class MyClient extends JFrame{
 		chat.setBorder(border);
 		f.add(chat, BorderLayout.NORTH);
 		
-		/*
-		JPanel container = new JPanel();
-		container.add(chat);
-		
-		JScrollPane scrollPane = new JScrollPane(container, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		//scrollPane.setBounds(500, 10, chat.getWidth(), chat.getHeight());
-		//scrollPane.(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		f.add(scrollPane);
-		*/
 		
 		f.setVisible(true);
 		
@@ -102,11 +96,15 @@ public class MyClient extends JFrame{
 				
 		
 	}
+	
+	// ** IM functionality
 
 	public void start() {
 		try{
+			// connect to server's open port
 			connect();
 			establishConnection();
+			// continually read messages
 			continueProcessing();
 		}catch(EOFException e) {
 			showMessage("\n Connection ended by: CLIENT");
@@ -117,9 +115,9 @@ public class MyClient extends JFrame{
 		}
 	}
 	
-	// standby for client connection
+	// connect to server's port
 	private void connect() throws IOException {
-		String input = JOptionPane.showInputDialog("Enter port number"); // 6789 default
+		String input = JOptionPane.showInputDialog("Enter port number");
 		int port = Integer.parseInt(input);
 		showMessage("Connecting... \n");
 		socket = new Socket(InetAddress.getByName(IP), port);
@@ -147,6 +145,7 @@ public class MyClient extends JFrame{
 		}while(!message.equals("#SERVER > END"));
 	}
 	
+	// close streams and detatch
 	private void end() {
 		showMessage("\n Closing connections... \n");
 		canType(false);
@@ -155,6 +154,7 @@ public class MyClient extends JFrame{
 			inputStream.close();
 			socket.close();
 		}catch(IOException e){
+			showMessage("\n Did not close correctly");
 			e.printStackTrace();
 		}
 	}
@@ -181,6 +181,7 @@ public class MyClient extends JFrame{
 		);
 	}
 	
+	// enable/disable setEditable
 	private void canType(final boolean tof) {
 		SwingUtilities.invokeLater(
 			new Runnable(){
@@ -191,15 +192,32 @@ public class MyClient extends JFrame{
 		);
 	}
 	
-	private String encrypt(String message) throws Exception {
-		return "";
+	// ** encryption (couldn't figure out)
+	
+	private static String encrypt(String plainText, String secretKey) {
+		StringBuffer encryptedString = new StringBuffer();
+		int encryptedInt;
+		for (int i = 0; i < plainText.length(); i++) {
+			int plainTextInt = (int) (plainText.charAt(i) - 'A');
+			int secretKeyInt = (int) (secretKey.charAt(i) - 'A');
+			encryptedInt = (plainTextInt + secretKeyInt) % 26;
+			encryptedString.append((char) ((encryptedInt) + (int) 'A'));
+		}
+		return encryptedString.toString();
+	}
+
+	private static String decrypt(String decryptedText, String secretKey) {
+		StringBuffer decryptedString = new StringBuffer();
+		int decryptedInt;
+		for (int i = 0; i < decryptedText.length(); i++) {
+			int decryptedTextInt = (int) (decryptedText.charAt(i) - 'A');
+			int secretKeyInt = (int) (secretKey.charAt(i) - 'A');
+			decryptedInt = decryptedTextInt - secretKeyInt;
+			if (decryptedInt < 1)
+				decryptedInt += 26;
+			decryptedString.append((char) ((decryptedInt) + (int) 'A'));
+		}
+		return decryptedString.toString();
 	}
 	
-	private String decrypt(String message) {
-		return "";
-	}
-	
-	private void keyExchange() {
-		
-	}
 }
