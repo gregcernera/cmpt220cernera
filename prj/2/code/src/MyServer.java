@@ -10,6 +10,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+// SERVER/CLIENT INSTANT MESSAGING PROGRAM
+
 public class MyServer extends JFrame {
 	
 	private JTextArea chat;
@@ -21,7 +23,8 @@ public class MyServer extends JFrame {
 	private ServerSocket server;
 	private Socket socket;
 	
-	
+	// key for encryption/decryption
+	String KEY = "12345654321";
 	
 	// constructor for MyServer - sets up server window
 	public MyServer() throws Exception {
@@ -80,7 +83,7 @@ public class MyServer extends JFrame {
 	// ** IM functionality
 
 	public void start() {
-		String input = JOptionPane.showInputDialog("Enter port number"); // 6789 default
+		String input = JOptionPane.showInputDialog("Enter port number"); 
 		int port = Integer.parseInt(input);
 		try {
 			server = new ServerSocket(port, 100);
@@ -90,6 +93,7 @@ public class MyServer extends JFrame {
 					// begin connection
 					waitForConnection();
 					establishConnection();
+					// continually read messages
 					continueProcessing();
 				} catch(EOFException e) {
 					showMessage("// The server host terminated the connection //");
@@ -115,7 +119,7 @@ public class MyServer extends JFrame {
 		showMessage("Connection established: This server is now connected to " + socket.getInetAddress().getHostName());
 	}
 	
-	// connect ports and set up streams
+	// connect ports and set up input and output streams
 	private void establishConnection() throws IOException {
 		outputStream = new ObjectOutputStream(socket.getOutputStream());
 		outputStream.flush();
@@ -131,6 +135,7 @@ public class MyServer extends JFrame {
 		
 		do {
 			//have a conversation
+			// continually trying to read object from client
 			try {
 				message = (String) inputStream.readObject();
 				showMessage("\n" + message);
@@ -140,6 +145,7 @@ public class MyServer extends JFrame {
 		}while(!message.equals("$CLIENT > END"));
 	}
 	
+	// close streams and sockets
 	private void end() {
 		showMessage("\n Closing connections... \n");
 		canType(false);
@@ -148,15 +154,16 @@ public class MyServer extends JFrame {
 			inputStream.close();
 			socket.close();
 		}catch(IOException e){
+			showMessage("\n Did not close correctly");
 			e.printStackTrace();
 		}
 	}
 	
-	private void sendMessage(final String msg) {
+	private void sendMessage(final String message) {
 		try{
-			outputStream.writeObject("#SERVER > " + msg);
+			outputStream.writeObject("#SERVER > " + message);
 			outputStream.flush();
-			showMessage("\n#SERVER > " + msg);
+			showMessage("\n#SERVER > " + message);
 		}catch(IOException e){
 			chat.append("\n Error: unable to send message");
 			e.printStackTrace();
@@ -164,21 +171,22 @@ public class MyServer extends JFrame {
 		
 	}
 	
-	private void showMessage(final String msg) {
+	private void showMessage(final String message) {
 		SwingUtilities.invokeLater(
 			new Runnable(){
 				public void run(){
-					chat.append(msg);
+					chat.append(message);
 				}
 			}
 		);
 	}
 	
-	private void canType(final boolean tof) {
+	// enable/disable setEditable
+	private void canType(final boolean flag) {
 		SwingUtilities.invokeLater(
 			new Runnable(){
 				public void run(){
-					txtbox.setEditable(tof);
+					txtbox.setEditable(flag);
 				}
 			}
 		);
@@ -187,19 +195,30 @@ public class MyServer extends JFrame {
 	
 	// ** encryption (couldn't figure out)
 	
-	private static String encrypt(String message, Key aesKey, Cipher cipher) throws Exception {
-		cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-		byte [] encrypted = cipher.doFinal(message.getBytes());
-		Base64.Encoder encoder = Base64.getEncoder();
-		String encryptedString = encoder.encodeToString(encrypted);
-		return encryptedString;
+	private static String encrypt(String plainText, String secretKey) {
+		StringBuffer encryptedString = new StringBuffer();
+		int encryptedInt;
+		for (int i = 0; i < plainText.length(); i++) {
+			int plainTextInt = (int) (plainText.charAt(i) - 'A');
+			int secretKeyInt = (int) (secretKey.charAt(i) - 'A');
+			encryptedInt = (plainTextInt + secretKeyInt) % 26;
+			encryptedString.append((char) ((encryptedInt) + (int) 'A'));
+		}
+		return encryptedString.toString();
 	}
-	
-	private static String decrypt(String encryptedString, Key aesKey, Cipher cipher) throws Exception {
-		Base64.Decoder decoder = Base64.getDecoder();
-		cipher.init(Cipher.DECRYPT_MODE, aesKey);
-		String decrypted = new String(cipher.doFinal(decoder.decode(encryptedString)));
-		return decrypted;
+
+	private static String decrypt(String decryptedText, String secretKey) {
+		StringBuffer decryptedString = new StringBuffer();
+		int decryptedInt;
+		for (int i = 0; i < decryptedText.length(); i++) {
+			int decryptedTextInt = (int) (decryptedText.charAt(i) - 'A');
+			int secretKeyInt = (int) (secretKey.charAt(i) - 'A');
+			decryptedInt = decryptedTextInt - secretKeyInt;
+			if (decryptedInt < 1)
+				decryptedInt += 26;
+			decryptedString.append((char) ((decryptedInt) + (int) 'A'));
+		}
+		return decryptedString.toString();
 	}
 	
 	
